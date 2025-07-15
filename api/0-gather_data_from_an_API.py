@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-script to fetch employee's todo list and return progress
+Script to fetch employee's todo list and return progress
 """
 
 import requests
@@ -10,7 +10,9 @@ import sys
 def fetch_todo_progress(employee_id):
     try:
         # Fetch employee details
-        user_url = f"https://jsonplaceholder.typicode.com/users/{employee_id}"
+        user_url = (
+            f"https://jsonplaceholder.typicode.com/users/{employee_id}"
+        )
         user_response = requests.get(user_url)
         user_response.raise_for_status()
         user_data = user_response.json()
