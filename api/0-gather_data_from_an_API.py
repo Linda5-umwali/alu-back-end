@@ -3,8 +3,9 @@
 script to fetch employee's todo list and return progress
 """
 
-import sys
 import requests
+import sys
+
 
 def fetch_todo_progress(employee_id):
     try:
@@ -29,7 +30,7 @@ def fetch_todo_progress(employee_id):
         # Print summary
         print(
             f"Employee {employee_name} is done with tasks({number_of_done_tasks}/{total_tasks}):"
-              )
+        )
         for task in done_tasks:
             print(f"\t {task.get('title')}")
     except requests.RequestException as e:
@@ -39,8 +40,10 @@ def fetch_todo_progress(employee_id):
     except Exception as e:
         print(f"Unexpected error: {e}")
 
+
 if __name__ == "__main__":
     if len(sys.argv) != 2 or not sys.argv[1].isdigit():
         print("Usage: ./script.py <employee_id>")
     else:
         fetch_todo_progress(int(sys.argv[1]))
+
