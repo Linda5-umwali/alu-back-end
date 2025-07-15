@@ -1,54 +1,50 @@
 #!/usr/bin/python3
 """
-Script that fetches an employee's TODO list and exports it to JSON.
+Script to export employee's TODO list to a CSV file
 """
-import json
-import sys
+
+import csv
 import requests
+import sys
 
 
-
-def fetch_and_export_to_json(employee_id: int) -> None:
+def fetch_and_export_to_csv(employee_id):
     """
-    Fetch employee tasks and export to JSON file.
+    Fetch employee tasks from API and export them to CSV.
 
     Args:
         employee_id (int): ID of the employee.
     """
-    # Fetch user info
-    user_url = f"https://jsonplaceholder.typicode.com/users/{employee_id}"
+    user_url = (
+        f"https://jsonplaceholder.typicode.com/users/{employee_id}"
+    )
     user_response = requests.get(user_url)
     user_response.raise_for_status()
     user = user_response.json()
     username = user.get("username")
 
-    # Fetch todos
-    todos_url = f"https://jsonplaceholder.typicode.com/todos?userId={employee_id}"
+    todos_url = (
+        f"https://jsonplaceholder.typicode.com/todos?userId={employee_id}"
+    )
     todos_response = requests.get(todos_url)
     todos_response.raise_for_status()
     todos = todos_response.json()
 
-    # Format tasks for JSON
-    task_list = [{
-        "task": task.get("title"),
-        "completed": task.get("completed"),
-        "username": username
-    } for task in todos]
-
-    # Final structure
-    data = {str(employee_id): task_list}
-
-    # Save to JSON file
-    filename = f"{employee_id}.json"
-    with open(filename, "w", encoding='utf-8') as json_file:
-        json.dump(data, json_file, indent=4)
-
-    print(f"Exported {len(todos)} tasks to {filename}")
+    filename = f"{employee_id}.csv"
+    with open(filename, mode='w', newline='', encoding='utf-8') as csv_file:
+        writer = csv.writer(csv_file, quoting=csv.QUOTE_ALL)
+        for task in todos:
+            writer.writerow([
+                employee_id,
+                username,
+                task.get("completed"),
+                task.get("title")
+            ])
 
 
 if __name__ == "__main__":
     if len(sys.argv) != 2 or not sys.argv[1].isdigit():
-        print("Usage: ./script.py <employee_id>")
+        print("Usage: ./1-export_to_CSV.py <employee_id>")
         sys.exit(1)
 
-    fetch_and_export_to_json(int(sys.argv[1]))
+    fetch_and_export_to_csv(int(sys.argv[1]))
