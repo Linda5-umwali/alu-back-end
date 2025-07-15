@@ -51,4 +51,3 @@ if __name__ == "__main__":
         print("Usage: ./0-gather_data_from_an_API.py <employee_id>")
     else:
         fetch_todo_progress(int(sys.argv[1]))
-
